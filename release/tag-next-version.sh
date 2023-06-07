@@ -11,12 +11,15 @@ function aheadLatestVersion() {
 }
 
 function minorChangesCount() {
-  git --no-pager  log --pretty="format:%s" HEAD...v0.3.1 | grep -cE "^($minorChangesTypes){1}(\([[:alnum:]._-]+\))?(!)?:.*"
+  git --no-pager  log --pretty="format:%s" HEAD..."$1" | grep -cE "^($minorChangesTypes){1}(\([[:alnum:]._-]+\))?(!)?:.*"
 }
 
 function patchChangesCount() {
-  git --no-pager  log --pretty="format:%s" HEAD...v0.3.1 | grep -cvE "^($minorChangesTypes){1}(\([[:alnum:]._-]+\))?(!)?:.*"
+  git --no-pager  log --pretty="format:%s" HEAD..."$1" | grep -cvE "^($minorChangesTypes){1}(\([[:alnum:]._-]+\))?(!)?:.*"
 }
+
+## ensure we have tags
+git fetch --force --tags
 
 {
 rawVersion=$(latestVersion)
@@ -36,9 +39,9 @@ if (($(aheadLatestVersion) == 0)); then
 fi
 
 nextVersion="$rawVersion"
-if (($(minorChangesCount) > 0)); then
+if (($(minorChangesCount "$rawVersion") > 0)); then
   nextVersion="v$major.$((minor+1)).0"
-elif (($(patchChangesCount) > 0)); then
+elif (($(patchChangesCount "$rawVersion") > 0)); then
   nextVersion="v$major.$minor.$((patch+1))"
 fi
 
