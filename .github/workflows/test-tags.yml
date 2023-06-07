@@ -1,0 +1,15 @@
+name: On New Tag
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  show-tags:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Print new version
+        run: git describe --tags --exact-match --long
