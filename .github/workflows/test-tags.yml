@@ -3,7 +3,7 @@ name: On New Tag
 on:
   push:
     tags:
-      - 'v*'
+      - '*'
 
 jobs:
   show-tags:
@@ -11,5 +11,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Print new version
+      - name: Describe tag
         run: git describe --tags --exact-match --long
