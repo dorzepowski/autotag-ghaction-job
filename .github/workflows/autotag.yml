@@ -1,0 +1,19 @@
+name: Automatic Git Tag
+permissions:
+  contents: write
+
+on:
+  push:
+    branches: [ master,main ]
+
+jobs:
+  tag-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Create version tag
+        run: ./release/tag-next-version.sh
+
+      - name: Push new tag
+        run: git push --tags
